@@ -1,11 +1,12 @@
 package com.kre.shoplist.presentation
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.kre.shoplist.data.ShopListRepositoryImpl
 import com.kre.shoplist.domain.Item
 import com.kre.shoplist.domain.Manager
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = ShopListRepositoryImpl
 
@@ -16,7 +17,7 @@ class MainViewModel : ViewModel() {
         manager.addItem(item)
     }
 
-    fun getItem(id: Int): Item {
+    fun getItem(id: Int): Item? {
         return manager.getItem(id)
     }
 

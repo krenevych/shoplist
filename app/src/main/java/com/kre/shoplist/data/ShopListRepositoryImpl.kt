@@ -2,21 +2,25 @@ package com.kre.shoplist.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kre.shoplist.domain.Item
 import com.kre.shoplist.domain.ShopListRepository
 
 object ShopListRepositoryImpl : ShopListRepository {
 
-    private val shopList = mutableListOf<Item>()
-    private val shopListLD = MutableLiveData<List<Item>>()
+    private val shopList = sortedSetOf<Item>({ left, right -> left.id.compareTo(right.id) })
+
+    private val liveData = MyLiveData()
     private var currentId = 0
 
     init {
-        Log.d("XXWWWX", "Init")
-        for (i in 0..10){
-            addItem(Item("Item$i", i))
+        Log.d("XXXXXLIVE", "Init")
+        for (id in 1..1000){
+            addItem(Item("Name $id", id))
         }
+    }
+
+    init {
+        Log.e("XXXXXLIVE", "Init2")
     }
 
     override fun addItem(item: Item) {
@@ -32,24 +36,30 @@ object ShopListRepositoryImpl : ShopListRepository {
         addItem(item)
     }
 
-    override fun getItem(id: Int): Item {
-        return shopList.find {
+    override fun getItem(id: Int): Item? {
+        val find = shopList.find {
             it.id == id
-        } ?: throw RuntimeException("Element with id $id not found!")
+        }
+
+        find.let {
+            return it
+        }
+
     }
 
     override fun removeItem(id: Int) {
         val item = getItem(id)
         shopList.remove(item)
+
         updateLiveData()
     }
 
     override fun getItems(): LiveData<List<Item>> {
-        return shopListLD
+        return liveData
     }
 
-    private fun updateLiveData(){
-        shopListLD.value = shopList.toList()
+    private fun updateLiveData() {
+        liveData.value = shopList.toList()
     }
 
 }

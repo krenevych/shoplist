@@ -12,7 +12,7 @@ class Manager(private val repository: ShopListRepository) {
         repository.updateItem(item)
     }
 
-    fun getItem(id: Int): Item {
+    fun getItem(id: Int): Item? {
         return repository.getItem(id)
     }
 
