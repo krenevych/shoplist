@@ -27,8 +27,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private val adapter = ShopListAdapter()
+
     private fun initRecyclerView() {
-        rv_shop_list.adapter = ShopListAdapter(viewModel.shopList)
+        rv_shop_list.adapter = adapter
     }
 
     private fun initVM() {
@@ -36,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this)
         {
+            adapter.list = it
         }
-
     }
 
 

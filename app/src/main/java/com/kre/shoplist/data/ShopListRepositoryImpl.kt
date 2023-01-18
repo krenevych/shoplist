@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.kre.shoplist.domain.Item
 import com.kre.shoplist.domain.ShopListRepository
+import kotlin.random.Random
 
 object ShopListRepositoryImpl : ShopListRepository {
 
@@ -14,8 +15,8 @@ object ShopListRepositoryImpl : ShopListRepository {
 
     init {
         Log.d("XXXXXLIVE", "Init")
-        for (id in 1..1000){
-            addItem(Item("Name $id", id))
+        for (id in 1..100){
+            addItem(Item("Name $id", id, Random.nextBoolean()))
         }
     }
 
