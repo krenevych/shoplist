@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-
+        rv_shop_list.adapter = ShopListAdapter(viewModel.shopList)
     }
 
     private fun initVM() {
@@ -36,37 +36,10 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this)
         {
-            showList(it)
         }
 
     }
 
-    private fun showList(list: List<Item>) {
-        ll_container.removeAllViews()
-        for (item in list) {
-            val layoutId =
-                if (item.enabled) {
-                    R.layout.item_shop_enabled
-                } else {
-                    R.layout.item_shop_disabled
-                }
-
-            val itemView = LayoutInflater.from(this).inflate(layoutId, ll_container, false)
-            val tvName: TextView =  itemView.findViewById(R.id.tv_name)
-            val tvCount: TextView =  itemView.findViewById(R.id.tv_count)
-
-            tvName.text = item.name
-            tvCount.text = item.count.toString()
-
-            ll_container.addView(itemView)
-
-            itemView.setOnLongClickListener {
-                viewModel.toggleEnabled(item)
-                true
-            }
-
-        }
-    }
 
     private fun buttonInit() = button_add_shop_item.setOnClickListener {
         viewModel.addItem(Item("New", 999))
