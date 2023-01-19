@@ -7,5 +7,6 @@ interface ShopListRepository {
     fun updateItem(item: Item)
     fun getItem(id: Int) : Item?
     fun removeItem(id: Int)
+    fun removeItem(item: Item)
     fun getItems() : LiveData<List<Item>>
 }

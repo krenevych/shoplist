@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
+
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
 
@@ -16,6 +18,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
     }
 
     var longClickListener : ( (Item) -> Unit )? = null
+    var shortClickListener : ( (Item) -> Unit )? = null
 
     var list: List<Item> = listOf()
         set(value) {
@@ -31,12 +34,24 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
         }
 
         val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+
+
         return ItemViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.tvName.text = list[position].name
-        holder.tvCount.text = list[position].count.toString()
+        val item = list[position]
+        holder.tvName.text = item.name
+        holder.tvCount.text = item.count.toString()
+
+        holder.view.setOnLongClickListener {
+            longClickListener?.invoke(item)
+            true
+        }
+
+        holder.view.setOnClickListener {
+            shortClickListener?.invoke(item)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -51,8 +66,24 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
         return list.size
     }
 
-    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tv_name)
         val tvCount: TextView = view.findViewById(R.id.tv_count)
+    }
+
+    class SwipeCallback(val action: (Int) -> Unit) :
+        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder,
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val adapterPosition = viewHolder.adapterPosition
+            action(adapterPosition)
+        }
     }
 }

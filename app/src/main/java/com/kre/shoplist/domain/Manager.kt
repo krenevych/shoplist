@@ -20,6 +20,10 @@ class Manager(private val repository: ShopListRepository) {
         repository.removeItem(id)
     }
 
+    fun removeItem(item: Item) {
+        repository.removeItem(item)
+    }
+
     fun getItems(): LiveData<List<Item>> {
         return repository.getItems()
     }

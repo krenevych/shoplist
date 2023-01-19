@@ -25,6 +25,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         manager.removeItem(id)
     }
 
+    fun removeItem(item: Item){
+        manager.removeItem(item)
+    }
+
     fun toggleEnabled(item: Item) {
         manager.updateItem(item.copy(enabled = !item.enabled))
     }

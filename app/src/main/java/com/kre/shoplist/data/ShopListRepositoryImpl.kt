@@ -50,8 +50,13 @@ object ShopListRepositoryImpl : ShopListRepository {
 
     override fun removeItem(id: Int) {
         val item = getItem(id)
-        shopList.remove(item)
+        item?.let {
+            removeItem(it)
+        }
+    }
 
+    override fun removeItem(item: Item) {
+        shopList.remove(item)
         updateLiveData()
     }
 
