@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kre.shoplist.R
@@ -22,8 +23,10 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
 
     var list: List<Item> = listOf()
         set(value) {
+            val diffCallback = ListDiffCallback(list, value)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {

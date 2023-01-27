@@ -6,23 +6,24 @@ import com.kre.shoplist.domain.Item
 class ListDiffCallback(
     private val oldList: List<Item>,
     private val newList: List<Item>,
-) : DiffUtil.Callback()
-{
+) : DiffUtil.Callback() {
     override fun getOldListSize() = oldList.size
 
     override fun getNewListSize() = newList.size
 
     override fun areItemsTheSame(
         oldItemPosition: Int,
-        newItemPosition: Int
+        newItemPosition: Int,
     ): Boolean {
-        TODO("Not yet implemented")
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
         oldItemPosition: Int,
-        newItemPosition: Int
+        newItemPosition: Int,
     ): Boolean {
-        TODO("Not yet implemented")
-    }
+        return oldList[oldItemPosition] == newList[newItemPosition]
+     }
 }
