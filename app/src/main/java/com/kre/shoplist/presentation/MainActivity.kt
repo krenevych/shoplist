@@ -37,13 +37,13 @@ class MainActivity : AppCompatActivity() {
         adapter.longClickListener = viewModel::toggleEnabled
 
         adapter.shortClickListener = {
-            Toast.makeText(this, "Item: $it", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Item: $it", Toast.LENGTH_SHORT).show()
         }
 
         val swipeCallback = ShopListAdapter.SwipeCallback {pos ->
-            val item = adapter.list[pos]
+            val item = adapter.currentList[pos]
             viewModel.removeItem(item)
-            Toast.makeText(this, "Remove Item $item", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Remove Item $item", Toast.LENGTH_SHORT).show()
 
         }
 
@@ -54,9 +54,8 @@ class MainActivity : AppCompatActivity() {
     private fun initVM() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.shopList.observe(this)
-        {
-            adapter.list = it
+        viewModel.shopList.observe(this) {
+            adapter.submitList(it)
         }
     }
 

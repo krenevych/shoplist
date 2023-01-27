@@ -1,17 +1,15 @@
 package com.kre.shoplist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
 
-class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
+class ShopListAdapter : ListAdapter<Item, ItemViewHolder>(ItemDiffCallback()) {
 
     companion object {
         const val TYPE_ACTIVE = 0
@@ -20,14 +18,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
 
     var longClickListener : ( (Item) -> Unit )? = null
     var shortClickListener : ( (Item) -> Unit )? = null
-
-    var list: List<Item> = listOf()
-        set(value) {
-            val diffCallback = ListDiffCallback(list, value)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val layoutId = when (viewType) {
@@ -43,7 +33,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = list[position]
+        val item = getItem(position)
         holder.tvName.text = item.name
         holder.tvCount.text = item.count.toString()
 
@@ -58,20 +48,11 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ItemViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (list[position].enabled) {
+        return if (getItem(position).enabled) {
             TYPE_ACTIVE
         } else {
             TYPE_NON_ACTIVE
         }
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val tvName: TextView = view.findViewById(R.id.tv_name)
-        val tvCount: TextView = view.findViewById(R.id.tv_count)
     }
 
     class SwipeCallback(val action: (Int) -> Unit) :
