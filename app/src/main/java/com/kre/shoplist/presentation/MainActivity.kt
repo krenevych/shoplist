@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Item: $it", Toast.LENGTH_SHORT).show()
         }
 
-        val swipeCallback = ShopListAdapter.SwipeCallback {pos ->
+        val swipeCallback = SwipeCallback {pos ->
             val item = adapter.currentList[pos]
             viewModel.removeItem(item)
             Toast.makeText(this, "Remove Item $item", Toast.LENGTH_SHORT).show()
