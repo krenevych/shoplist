@@ -2,9 +2,7 @@ package com.kre.shoplist.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
