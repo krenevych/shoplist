@@ -1,11 +1,10 @@
 package com.kre.shoplist.presentation
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
@@ -38,6 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         adapter.shortClickListener = {
             Toast.makeText(this, "Item: $it", Toast.LENGTH_SHORT).show()
+
+            startActivity(Intent(this, ItemModificationActivity::class.java)
+                .apply {
+                    putExtra("key", "1111")
+                }
+            )
         }
 
         val swipeCallback = SwipeCallback {pos ->
