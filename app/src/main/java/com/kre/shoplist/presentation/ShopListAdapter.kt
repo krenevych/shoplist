@@ -14,8 +14,8 @@ class ShopListAdapter : ListAdapter<Item, ItemViewHolder>(ItemDiffCallback()) {
         const val TYPE_NON_ACTIVE = 1
     }
 
-    var longClickListener : ( (Item) -> Unit )? = null
-    var shortClickListener : ( (Item) -> Unit )? = null
+    var longClickListener: ((Item) -> Unit)? = null
+    var shortClickListener: ((Item) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val layoutId = when (viewType) {
@@ -25,7 +25,6 @@ class ShopListAdapter : ListAdapter<Item, ItemViewHolder>(ItemDiffCallback()) {
         }
 
         val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
-
 
         return ItemViewHolder(view)
     }
