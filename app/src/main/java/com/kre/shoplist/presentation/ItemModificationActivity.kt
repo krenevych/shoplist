@@ -1,6 +1,8 @@
 package com.kre.shoplist.presentation
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -28,26 +30,34 @@ class ItemModificationActivity : AppCompatActivity() {
         val itemId = intent.getIntExtra(Constants.EXTRA_ITEM_ID_NAME, Item.UNDEFINED_ID)
         itemId.let {
             viewModel.getItem(it)
-            Log.e(TAG, "onCreate: ", )
+            Log.e(TAG, "onCreate: ")
         }
 
-        initSaveBtn()
+        when (mode) {
+            Constants.MODE_EDIT -> launchInEditMode()
+            Constants.MODE_ADD -> launchInAddMode()
+        }
+
+        initEditViews()
     }
 
-    private fun initSaveBtn() {
-        Log.e(TAG, "initSaveBtn: ")
+    private fun launchInEditMode() {
+        Log.d(TAG, "launchInEditMode: ")
         button_save.setOnClickListener {
-            if (mode == Constants.MODE_EDIT) {
-                viewModel.editItem(
-                    edit_text_name.text.toString(),
-                    edit_text_count.text.toString()
-                )
-            } else {
-                viewModel.addItem(
-                    edit_text_name.text.toString(),
-                    edit_text_count.text.toString()
-                )
-            }
+            viewModel.editItem(
+                edit_text_name.text.toString(),
+                edit_text_count.text.toString()
+            )
+        }
+    }
+
+    private fun launchInAddMode() {
+        Log.d(TAG, "launchInAddMode: ")
+        button_save.setOnClickListener {
+            viewModel.addItem(
+                edit_text_name.text.toString(),
+                edit_text_count.text.toString()
+            )
         }
     }
 
@@ -55,15 +65,11 @@ class ItemModificationActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[ItemModificationViewModel::class.java]
 
         viewModel.errorNameLiveData.observe(this) {
-            if (it) {
-                Toast.makeText(this, "NameError", Toast.LENGTH_SHORT).show()
-            }
+            til_name.error = if (it) "Please enter valid name" else null
         }
 
         viewModel.errorCountLiveData.observe(this) {
-            if (it) {
-                Toast.makeText(this, "CountError", Toast.LENGTH_SHORT).show()
-            }
+            til_count.error = if (it) "Number has be grater than zero" else null
         }
 
         viewModel.closeEvent.observe(this) {
@@ -81,5 +87,33 @@ class ItemModificationActivity : AppCompatActivity() {
                 edit_text_count.setText(it.count.toString())
             }
         }
+    }
+
+    private fun initEditViews() {
+        edit_text_name.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.resetNameLiveData()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
+        edit_text_count.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.resetCountLiveData()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
     }
 }
