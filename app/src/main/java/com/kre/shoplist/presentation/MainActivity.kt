@@ -34,14 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter.longClickListener = viewModel::toggleEnabled
 
-        adapter.shortClickListener = {
-            startActivity(Intent(this, ItemModificationActivity::class.java)
-                .apply {
-                    putExtra(Constants.EXTRA_MODE, Constants.MODE_EDIT)
-                    putExtra(Constants.EXTRA_ITEM_ID_NAME, it.id)
-                }
-            )
-        }
+        adapter.shortClickListener = { startActivity(IntentFactory.createEditIntent(this, it.id)) }
 
         val swipeCallback = SwipeCallback {pos ->
             val item = adapter.currentList[pos]
@@ -63,12 +56,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun buttonAddInit() = button_add_shop_item.setOnClickListener {
-        startActivity(Intent(this, ItemModificationActivity::class.java)
-            .apply {
-                putExtra(Constants.EXTRA_MODE, Constants.MODE_ADD)
-            }
-        )
+    private fun buttonAddInit() {
+        button_add_shop_item.setOnClickListener {
+            startActivity(IntentFactory.createAddIntent(this))
+        }
     }
 
 
