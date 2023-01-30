@@ -15,7 +15,7 @@ object ShopListRepositoryImpl : ShopListRepository {
 
     init {
         Log.d("XXXXXLIVE", "Init")
-        for (id in 1..100){
+        for (id in 1..15){
             addItem(Item("Name $id", id, Random.nextBoolean()))
         }
     }

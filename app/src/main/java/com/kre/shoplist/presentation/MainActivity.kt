@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.kre.shoplist.R
-import com.kre.shoplist.domain.Item
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         initVM()
         initRecyclerView()
-        buttonInit()
+        buttonAddInit()
 
     }
 
@@ -36,11 +35,10 @@ class MainActivity : AppCompatActivity() {
         adapter.longClickListener = viewModel::toggleEnabled
 
         adapter.shortClickListener = {
-            Toast.makeText(this, "Item: $it", Toast.LENGTH_SHORT).show()
-
             startActivity(Intent(this, ItemModificationActivity::class.java)
                 .apply {
-                    putExtra("key", "1111")
+                    putExtra(Constants.EXTRA_MODE, Constants.MODE_EDIT)
+                    putExtra(Constants.EXTRA_ITEM_ID_NAME, it.id)
                 }
             )
         }
@@ -65,8 +63,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun buttonInit() = button_add_shop_item.setOnClickListener {
-        viewModel.addItem(Item("New", 999))
+    private fun buttonAddInit() = button_add_shop_item.setOnClickListener {
+        startActivity(Intent(this, ItemModificationActivity::class.java)
+            .apply {
+                putExtra(Constants.EXTRA_MODE, Constants.MODE_ADD)
+            }
+        )
     }
 
 
