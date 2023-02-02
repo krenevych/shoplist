@@ -16,10 +16,7 @@ import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
 
-class ItemModificationFragment(
-    private val mode: String = Constants.MODE_UNKNOWN,
-    private val itemId: Int = Item.UNDEFINED_ID,
-) : Fragment() {
+class ItemModificationFragment : Fragment() {
 
     private val TAG: String = "FFFFFFFF"
 
@@ -30,6 +27,15 @@ class ItemModificationFragment(
     private lateinit var editTextCount: TextInputEditText
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
+
+    private var mode: String = Constants.MODE_UNKNOWN
+    private var itemId: Int = Item.UNDEFINED_ID
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        parseParams(requireArguments())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,17 +49,25 @@ class ItemModificationFragment(
         super.onViewCreated(view, savedInstanceState)
 
         createVM()
-
         findViews(view)
-
         viewModel.getItem(itemId)
 
-        when (mode) {
-            Constants.MODE_EDIT -> launchInEditMode()
-            Constants.MODE_ADD -> launchInAddMode()
-        }
+        launchInRightMode()
 
         initEditViews()
+    }
+
+    private fun parseParams(arguments: Bundle) {
+        if (!arguments.containsKey(Constants.MODE)){
+            throw java.lang.RuntimeException("Arguments of fragment don't contain a key Constants.MODE")
+        }
+        mode = arguments.getString(Constants.MODE) ?: Constants.MODE_UNKNOWN
+        if (mode == Constants.MODE_EDIT && !arguments.containsKey(Constants.ITEM_ID)){
+            throw java.lang.RuntimeException("Unknown itemId for creating")
+        } else {
+            itemId = arguments.getInt(Constants.ITEM_ID)
+        }
+
     }
 
     private fun findViews(view: View) {
@@ -62,6 +76,13 @@ class ItemModificationFragment(
         editTextCount = view.findViewById(R.id.edit_text_count)
         tilName = view.findViewById(R.id.til_name)
         tilCount = view.findViewById(R.id.til_count)
+    }
+
+    private fun launchInRightMode() {
+        when (mode) {
+            Constants.MODE_EDIT -> launchInEditMode()
+            Constants.MODE_ADD -> launchInAddMode()
+        }
     }
 
     private fun launchInEditMode() {
