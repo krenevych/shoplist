@@ -58,16 +58,17 @@ class ItemModificationFragment : Fragment() {
     }
 
     private fun parseParams(arguments: Bundle) {
-        if (!arguments.containsKey(Constants.MODE)){
+        if (!arguments.containsKey(Constants.MODE)) {
             throw java.lang.RuntimeException("Arguments of fragment don't contain a key Constants.MODE")
         }
         mode = arguments.getString(Constants.MODE) ?: Constants.MODE_UNKNOWN
-        if (mode == Constants.MODE_EDIT && !arguments.containsKey(Constants.ITEM_ID)){
-            throw java.lang.RuntimeException("Unknown itemId for creating")
-        } else {
-            itemId = arguments.getInt(Constants.ITEM_ID)
+        if (mode == Constants.MODE_EDIT) {
+            if (!arguments.containsKey(Constants.ITEM_ID)) {
+                throw java.lang.RuntimeException("Unknown itemId for creating")
+            } else {
+                itemId = arguments.getInt(Constants.ITEM_ID)
+            }
         }
-
     }
 
     private fun findViews(view: View) {
@@ -158,5 +159,25 @@ class ItemModificationFragment : Fragment() {
             }
 
         })
+    }
+
+    companion object {
+
+        fun newFragmentEditItem(itemId: Int): Fragment {
+            return ItemModificationFragment().apply {
+                arguments = Bundle().apply {
+                    putString(Constants.MODE, Constants.MODE_EDIT)
+                    putInt(Constants.ITEM_ID, itemId)
+                }
+            }
+        }
+
+        fun newFragmentAddItem(): Fragment {
+            return ItemModificationFragment().apply {
+                arguments = Bundle().apply {
+                    putString(Constants.MODE, Constants.MODE_ADD)
+                }
+            }
+        }
     }
 }

@@ -2,7 +2,6 @@ package com.kre.shoplist.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
@@ -28,32 +27,19 @@ class ItemModificationActivity : AppCompatActivity() {
         when (mode) {
             Constants.MODE_EDIT -> supportFragmentManager
                 .beginTransaction()
-                .add(R.id.item_modification_container, newFragmentEditItem(itemId))
+                .add(
+                    R.id.item_modification_container,
+                    ItemModificationFragment.newFragmentEditItem(itemId)
+                )
                 .commit()
 
             Constants.MODE_ADD -> supportFragmentManager
                 .beginTransaction()
-                .add(R.id.item_modification_container, newFragmentAddItem())
+                .add(
+                    R.id.item_modification_container,
+                    ItemModificationFragment.newFragmentAddItem()
+                )
                 .commit()
-        }
-    }
-
-    companion object {
-
-        fun newFragmentEditItem(itemId: Int) : Fragment {
-            return ItemModificationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(Constants.MODE, Constants.MODE_EDIT)
-                    putInt(Constants.ITEM_ID, itemId)
-                }
-            }
-        }
-        fun newFragmentAddItem() : Fragment {
-            return ItemModificationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(Constants.MODE, Constants.MODE_ADD)
-                }
-            }
         }
     }
 
