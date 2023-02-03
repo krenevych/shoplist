@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             if (isOnePaneMode()) {
                 startActivity(IntentFactory.createEditIntent(this, it.id))
             } else {
-                launchFragment(ItemModificationFragment.newFragmentEditItem(it.id))
+                launchFragment(ItemModificationFragment.newFragmentEditItem(it.id), Constants.EDIT_ITEM_FRAGMENT_NAME)
             }
         }
 
@@ -63,20 +63,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun buttonAddInit() {
 
-        if (isOnePaneMode()) {
-            button_add_shop_item.setOnClickListener {
+        button_add_shop_item.setOnClickListener {
+            if (isOnePaneMode()) {
                 startActivity(IntentFactory.createAddIntent(this))
+            } else {
+                launchFragment(ItemModificationFragment.newFragmentAddItem(), Constants.ADD_ITEM_FRAGMENT_NAME)
             }
-        } else {
-            launchFragment(ItemModificationFragment.newFragmentAddItem())
         }
     }
 
     private fun isOnePaneMode(): Boolean = itemModificationContainer == null
-    private fun launchFragment(fragment: Fragment) {
+    private fun launchFragment(fragment: Fragment, name: String) {
+        supportFragmentManager.popBackStack()
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.item_modification_container, fragment)
+            .replace(R.id.item_modification_container, fragment)
+            .addToBackStack(name)
             .commit()
     }
 

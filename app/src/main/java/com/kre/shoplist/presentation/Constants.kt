@@ -7,4 +7,6 @@ object Constants {
     const val MODE_UNKNOWN: String = "mode_unknown"
     const val MODE_ADD = "mode_add"
     const val MODE_EDIT = "mode_edit"
+    const val EDIT_ITEM_FRAGMENT_NAME = "EditItemFragment"
+    const val ADD_ITEM_FRAGMENT_NAME = "AddItemFragment"
 }

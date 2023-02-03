@@ -2,6 +2,7 @@ package com.kre.shoplist.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
@@ -25,22 +26,17 @@ class ItemModificationActivity : AppCompatActivity() {
 
     private fun launchFragment() {
         when (mode) {
-            Constants.MODE_EDIT -> supportFragmentManager
-                .beginTransaction()
-                .add(
-                    R.id.item_modification_container,
-                    ItemModificationFragment.newFragmentEditItem(itemId)
-                )
-                .commit()
-
-            Constants.MODE_ADD -> supportFragmentManager
-                .beginTransaction()
-                .add(
-                    R.id.item_modification_container,
-                    ItemModificationFragment.newFragmentAddItem()
-                )
-                .commit()
+            Constants.MODE_EDIT ->  launchFragment(ItemModificationFragment.newFragmentEditItem(itemId))
+            Constants.MODE_ADD -> launchFragment(ItemModificationFragment.newFragmentAddItem())
         }
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.item_modification_container, fragment)
+            .commit()
     }
 
 }
