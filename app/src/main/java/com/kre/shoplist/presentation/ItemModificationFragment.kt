@@ -1,5 +1,6 @@
 package com.kre.shoplist.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -35,6 +36,22 @@ class ItemModificationFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         parseParams(requireArguments())
+    }
+
+    interface FinishListener {
+        fun onFinish(mode: String)
+    }
+
+    private lateinit var finishListener: FinishListener
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is FinishListener){
+            finishListener = context
+        } else {
+            throw RuntimeException("Activity has to implement FinishListener")
+        }
     }
 
     override fun onCreateView(
@@ -119,6 +136,7 @@ class ItemModificationFragment : Fragment() {
 
         viewModel.closeEvent.observe(viewLifecycleOwner) {
             if (it) {
+                finishListener.onFinish(Constants.MODE_EDIT)
                 activity?.onBackPressed()
             }
         }

@@ -1,12 +1,13 @@
 package com.kre.shoplist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.kre.shoplist.R
 import com.kre.shoplist.domain.Item
 
-class ItemModificationActivity : AppCompatActivity() {
+class ItemModificationActivity : AppCompatActivity(), ItemModificationFragment.FinishListener {
 
     private val TAG: String = "MMMMMMMMM"
 
@@ -37,6 +38,10 @@ class ItemModificationActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.item_modification_container, fragment)
             .commit()
+    }
+
+    override fun onFinish(mode: String) {
+        Toast.makeText(this, "Saved form ItemModificationActivity", Toast.LENGTH_SHORT).show()
     }
 
 }

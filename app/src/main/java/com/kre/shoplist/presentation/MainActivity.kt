@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.kre.shoplist.R
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ItemModificationFragment.FinishListener {
 
     companion object {
         const val TAG: String = "XXXXX"
@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.item_modification_container, fragment)
             .addToBackStack(name)
             .commit()
+    }
+
+    override fun onFinish(mode: String) {
+        if (!isOnePaneMode())
+            Toast.makeText(this, "$mode: Saved", Toast.LENGTH_SHORT).show()
     }
 
 }
