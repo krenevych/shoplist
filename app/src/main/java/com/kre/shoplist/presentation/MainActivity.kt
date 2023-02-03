@@ -83,8 +83,8 @@ class MainActivity : AppCompatActivity(), ItemModificationFragment.FinishListene
     }
 
     override fun onFinish(mode: String) {
-        if (!isOnePaneMode())
-            Toast.makeText(this, "$mode: Saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "$mode: Saved", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 
 }

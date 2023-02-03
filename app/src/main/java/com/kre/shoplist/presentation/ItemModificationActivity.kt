@@ -42,6 +42,7 @@ class ItemModificationActivity : AppCompatActivity(), ItemModificationFragment.F
 
     override fun onFinish(mode: String) {
         Toast.makeText(this, "Saved form ItemModificationActivity", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
 }

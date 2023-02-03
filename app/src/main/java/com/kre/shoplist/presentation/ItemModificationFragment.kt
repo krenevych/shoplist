@@ -137,7 +137,6 @@ class ItemModificationFragment : Fragment() {
         viewModel.closeEvent.observe(viewLifecycleOwner) {
             if (it) {
                 finishListener.onFinish(Constants.MODE_EDIT)
-                activity?.onBackPressed()
             }
         }
 
